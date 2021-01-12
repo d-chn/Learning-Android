@@ -16,6 +16,17 @@ import com.example.recyclerviewpractice_sob.utils.Datas;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * 总结：
+ * 1.首先要有控件，RecyclerView是在V7包下，所以我们要打开Module Settings里的dependencies
+ * 添加RecyclerView的依赖，这样才能在布局文件中使用RecyclerView控件
+ * 2.通过findViewById找到控件
+ * 3.准备好数据
+ * 4.设置布局管理器
+ * 5.创建适配器
+ * 6.设置适配器
+ * 7.数据显示
+ * */
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mList;
@@ -33,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
          * 这里只是模拟数据。在现实开发中，如果后台没有准备好，也是需要模拟数据的。
          * */
         initData();
+        /*
+         * 设置默认的显示样式为ListView的效果
+         * */
+        showList(true, false);
     }
 
     /*
@@ -51,13 +66,6 @@ public class MainActivity extends AppCompatActivity {
             //添加到集合里头
             mData.add(data);
         }
-        //RecyclerView需要设置样式，其实就是设置布局管理器
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mList.setLayoutManager(layoutManager);
-        //创建适配器
-        ListViewAdapter adapter = new ListViewAdapter(mData);
-        //设置到RecyclerView里去
-        mList.setAdapter(adapter);
     }
 
     @Override
@@ -73,12 +81,16 @@ public class MainActivity extends AppCompatActivity {
 
             //ListView的部分
             case R.id.list_view_vertical_standard:
+                showList(true, false);
                 break;
             case R.id.list_view_vertical_opposite:
+                showList(true, true);
                 break;
             case R.id.list_view_horizontal_standard:
+                showList(false, false);
                 break;
             case R.id.list_view_horizontal_opposite:
+                showList(false, true);
                 break;
 
             //GridView的部分
@@ -103,5 +115,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+     * 这个方法用于显示ListView一样的效果
+     * */
+    private void showList(boolean isVertical, boolean isReverse) {
+        //RecyclerView需要设置样式，其实就是设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        //设置布局管理器来控制
+        //设置水平还是垂直
+        layoutManager.setOrientation(isVertical ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL);
+        //设置正向（正常）还是反向
+        layoutManager.setReverseLayout(isReverse);
+        mList.setLayoutManager(layoutManager);
+        //创建适配器
+        ListViewAdapter adapter = new ListViewAdapter(mData);
+        //设置到RecyclerView里去
+        mList.setAdapter(adapter);
     }
 }
