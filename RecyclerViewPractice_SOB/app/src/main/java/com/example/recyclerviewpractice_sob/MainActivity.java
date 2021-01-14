@@ -1,14 +1,18 @@
 package com.example.recyclerviewpractice_sob;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.recyclerviewpractice_sob.adapters.GridViewAdapter;
 import com.example.recyclerviewpractice_sob.adapters.ListViewAdapter;
 import com.example.recyclerviewpractice_sob.beans.ItemBean;
 import com.example.recyclerviewpractice_sob.utils.Datas;
@@ -16,6 +20,9 @@ import com.example.recyclerviewpractice_sob.utils.Datas;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 /*
  * 总结：
  * 1.首先要有控件，RecyclerView是在V7包下，所以我们要打开Module Settings里的dependencies
@@ -95,12 +102,16 @@ public class MainActivity extends AppCompatActivity {
 
             //GridView的部分
             case R.id.grid_view_vertical_standard:
+                showGrid(true, false);
                 break;
             case R.id.grid_view_vertical_opposite:
+                showGrid(true, true);
                 break;
             case R.id.grid_view_horizontal_standard:
+                showGrid(false, false);
                 break;
             case R.id.grid_view_horizontal_opposite:
+                showGrid(false, true);
                 break;
 
             //StaggerView的部分
@@ -115,6 +126,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+     * 这个方法用于显示GridView一样的效果
+     * */
+    private void showGrid(boolean isVertical, boolean isReverse) {
+        //创建布局管理器
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        //设置水平还是垂直
+        layoutManager.setOrientation(isVertical ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL);
+        //设置正向（正常）还是反向
+        layoutManager.setReverseLayout(isReverse);
+        mList.setLayoutManager(layoutManager);
+        //创建适配器
+        GridViewAdapter adapter = new GridViewAdapter(mData,isVertical);
+        //设置到RecyclerView里去
+        mList.setAdapter(adapter);
     }
 
     /*
